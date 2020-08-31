@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\User; // 追加
+use App\User;
 
 class UsersController extends Controller
 {
@@ -80,6 +80,29 @@ class UsersController extends Controller
         return view('users.followers', [
             'user' => $user,
             'users' => $followers,
+        ]);
+    }
+    /**
+     * ユーザのフォロー一覧ページを表示するアクション。
+     *
+     * @param  $id  ユーザのid
+     * @return \Illuminate\Http\Response
+     */
+    public function favorites($id)
+    {
+        $user = User::findOrFail($id);
+//dd($user);
+//var_dump($user);
+        // 関係するモデルの件数をロード
+        $user->loadRelationshipCounts();
+        $microposts = $user->favorites()->paginate(10);
+
+
+        // ユーザ詳細ビューでそれらを表示
+//        return view('users.show', [
+        return view('users.favorites', [
+            'user' => $user,
+            'microposts' => $microposts,
         ]);
     }
 }

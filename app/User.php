@@ -50,7 +50,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'user_follow', 'user_id', 'follow_id')->withTimestamps();
     }
-
     /**
      * このユーザをフォロー中のユーザ。（ Userモデルとの関係を定義）
      */
@@ -59,12 +58,20 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_follow', 'follow_id', 'user_id')->withTimestamps();
     }
     /**
+     * このユーザがお気に入り登録している投稿。
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
+    }
+    /**
      * このユーザに関係するモデルの件数をロードする。
      */
     public function loadRelationshipCounts()
     {
 //        $this->loadCount('microposts');
-        $this->loadCount(['microposts', 'followings', 'followers']);
+        $this->loadCount(['microposts', 'followings', 'followers','favorites']);
+
     }
     /**
      * $userIdで指定されたユーザをフォローする。
@@ -111,7 +118,6 @@ class User extends Authenticatable
             return false;
         }
     }
-
     /**
      * 指定された $userIdのユーザをこのユーザがフォロー中であるか調べる。フォロー中ならtrueを返す。
      *
@@ -123,6 +129,64 @@ class User extends Authenticatable
         // フォロー中ユーザの中に $userIdのものが存在するか
         return $this->followings()->where('follow_id', $userId)->exists();
     }
+
+/* *********************** 追加 Start *********************** */
+
+    /**
+     * $micropstIdで指定されたユーザをフォローする。
+     *
+     * @param  int  $micropstId
+     * @return bool
+     */
+    public function favorite($micropstId)
+    {
+        // すでにお気に入りしているかの確認
+        $exist = $this->is_favorites($micropstId);
+
+        if ($exist) {
+            // すでにお気に入りしていれば何もしない
+            return false;
+        } else {
+            // 未お気に入りであればお気に入りする
+            $this->favorites()->attach($micropstId);
+            return true;
+        }
+    }
+
+    /**
+     * $micropstIdで指定されたつぶやきをお気に入り解除する。
+     *
+     * @param  int  $micropstId
+     * @return bool
+     */
+    public function unfavorite($micropstId)
+    {
+        // すでにお気に入りしているかの確認
+        $exist = $this->is_favorites($micropstId);
+
+        if ($exist) {
+            // すでにお気に入りしているときはお気に入り解除する
+            $this->favorites()->detach($micropstId);
+            return true;
+        } else {
+            // 未お気に入りであれば何もしない
+            return false;
+        }
+    }
+    /**
+     * 指定された $micropstIdのつぶやきをこのユーザがお気に入り中であるか調べる。お気に入り中ならtrueを返す。
+     *
+     * @param  int  $micropstId
+     * @return bool
+     */
+    public function is_favorites($micropstId)
+    {
+        // お気に入り中のつぶやきの中に $micropstIdのものが存在するか
+        return $this->favorites()->where('micropost_id', $micropstId)->exists();
+    }
+
+/* *********************** 追加 End *********************** */
+
     /**
      * このユーザとフォロー中ユーザの投稿に絞り込む。
      */
