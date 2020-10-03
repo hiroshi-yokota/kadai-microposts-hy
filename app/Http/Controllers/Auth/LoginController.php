@@ -27,7 +27,11 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+    
+    protected function redirectTo() {
 
+      return route('sys.rept', ['sys' => \Auth::id()]);
+   }
     /**
      * Create a new controller instance.
      *

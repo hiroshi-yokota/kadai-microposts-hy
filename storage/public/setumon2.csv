@@ -1,0 +1,6 @@
+id,setumon_no,setumontyp1,label1,val1,label2,val2,label3,val3,label4,val4,label5,val5,label6,val6,label7,val7,label8,val8,label9,val9,label10,val10,label11,val11,label12,val12
+1,radio,選んでください。,非常に良い,1,まぁまぁ良い,2,良い,3,悪い,4,非常に悪い,5,,,,,,,,,,,,,,
+2,checkbox,該当する項目を選んでください。,aaaaaaaaa,1,bbbbbbbb,2,ccccccccccc,3,ddddddddddd,4,eeeeeeeeeeeee,5,fffffffffffff,6,gggggggggg,7,hhhhhhhhh,8,iiiiiii,9,jjjjjjjjjjjj,10,kkkkkkkkkkkkkkkkkk,11,llllllllllllllll,12
+3,checkbox,該当する項目を選んでください。,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12
+4,select,選択してください。,会社員,1,経営者,2,自営業,3,フリーランス,4,その他,5,,,,,,,,,,,,,,
+5,text,上記でフリーランスを選んだ方は、内容を記載してください。,,,,,,,,,,,,,,,,,,,,,,,,
